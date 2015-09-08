@@ -1,7 +1,8 @@
 body {
   text-align: center;
 }
-#container {
+
+.container {
   padding-top: 30px;
   display: flex;
   justify-content: center;
@@ -17,7 +18,7 @@ p {
   margin:0;
 }
 
-#header {
+.header {
   width: 400px;
   margin: 0 auto;
   display:flex;
@@ -74,4 +75,3 @@ button:active {
   position:relative;
   top:1px;
 }
-

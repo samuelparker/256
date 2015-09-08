@@ -19,22 +19,22 @@ describe("TwoFiftySixGame", function () {
       });
 
       it("has a score of zero", function () {
-        expect(this.game.score).toBe(0);
+        expect(this.game.score()).toBe(0);
       });
 
       it("has an array of 16 values", function () {
-        expect(this.game.values.length).toBe(16);
+        expect(this.game.values().length).toBe(16);
       });
 
       it("has 14 zeroes in the values", function () {
-        var matches = this.game.values.filter(function (value) {
+        var matches = this.game.values().filter(function (value) {
           return value === 0;
         })
         expect(matches.length).toBe(14);
       });
 
       it("has two 2 or 4 values", function () {
-        var matches = this.game.values.filter(function (value) {
+        var matches = this.game.values().filter(function (value) {
           return (value === 2 || value === 4);
         })
         expect(matches.length).toBe(2);
@@ -53,11 +53,11 @@ describe("TwoFiftySixGame", function () {
         });
 
         it("has a score of zero", function () {
-          expect(this.game.score).toBe(0);
+          expect(this.game.score()).toBe(0);
         });
 
         it("has set values", function () {
-          expect(this.game.values).toEqual(
+          expect(this.game.values()).toEqual(
             [2,4,8,16, 0,0,0,32, 0,0,0,64, 0,0,0,2]);
         });
       });
@@ -132,7 +132,7 @@ describe("TwoFiftySixGame", function () {
       });
 
       it("smashed the numbers to the left, without effect", function () {
-        expect(this.game.values).toEqual([4,0,0,0, 8,0,0,0, 4,2,0,0, 4,8,4,0]);
+        expect(this.game.values()).toEqual([4,0,0,0, 8,0,0,0, 4,2,0,0, 4,8,4,0]);
       });
 
       it("doesn't add new numbers", function () {
@@ -140,7 +140,7 @@ describe("TwoFiftySixGame", function () {
       });
 
       it("doesn't change the score", function () {
-        expect(this.game.score).toBe(0);
+        expect(this.game.score()).toBe(0);
       });
     });
 
@@ -150,7 +150,7 @@ describe("TwoFiftySixGame", function () {
       });
 
       it("smashed the numbers to the right", function () {
-        var string = this.game.values.join(" ");
+        var string = this.game.values().join(" ");
         expect(string).toMatch(/. . . 4 . . . 8 . . 4 2 . 4 8 4/);
       });
 
@@ -160,14 +160,14 @@ describe("TwoFiftySixGame", function () {
           return (mustFills.indexOf(position) < 0);
         })
         var newFillIndex = extraFills[0];
-        var newValue = this.game.values[newFillIndex];
+        var newValue = this.game.values()[newFillIndex];
 
         expect(extraFills.length).toBe(1);
         expect(newValue === 2 || newValue === 4).toBe(true);
       });
 
       it("doesn't change the score", function () {
-        expect(this.game.score).toBe(0);
+        expect(this.game.score()).toBe(0);
       });
     });
 
@@ -177,7 +177,7 @@ describe("TwoFiftySixGame", function () {
       });
 
       it("smashed the numbers to the top", function () {
-        var string = this.game.values.join(" ");
+        var string = this.game.values().join(" ");
         expect(string).toMatch(/4 2 4 . 8 8 . . 8 . . . . . . ./);
       });
 
@@ -187,14 +187,14 @@ describe("TwoFiftySixGame", function () {
           return (mustFills.indexOf(position) < 0);
         })
         var newFillIndex = extraFills[0];
-        var newValue = this.game.values[newFillIndex];
+        var newValue = this.game.values()[newFillIndex];
 
         expect(extraFills.length).toBe(1);
         expect(newValue === 2 || newValue === 4).toBe(true);
       });
 
       it("increases the score", function () {
-        expect(this.game.score).toBe(8);
+        expect(this.game.score()).toBe(8);
       });
     });
 
@@ -204,7 +204,7 @@ describe("TwoFiftySixGame", function () {
       });
 
       it("smashed the numbers to the bottom", function () {
-        var string = this.game.values.join(" ");
+        var string = this.game.values().join(" ");
         expect(string).toMatch(/. . . . 4 . . . 8 2 . . 8 8 4 ./);
       });
 
@@ -214,14 +214,14 @@ describe("TwoFiftySixGame", function () {
           return (mustFills.indexOf(position) < 0);
         })
         var newFillIndex = extraFills[0];
-        var newValue = this.game.values[newFillIndex];
+        var newValue = this.game.values()[newFillIndex];
 
         expect(extraFills.length).toBe(1);
         expect(newValue === 2 || newValue === 4).toBe(true);
       });
 
       it("increases the score", function () {
-        expect(this.game.score).toBe(8);
+        expect(this.game.score()).toBe(8);
       });
     });
   });

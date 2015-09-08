@@ -15,14 +15,22 @@ var TOP_TO_BOTTOM = "T";
 var BOTTOM_TO_TOP = "B";
 var SIDES         = "Left Right Top Bottom".split(" ");
 
+var MOVE_MAP = {
+  "Left"  : "Left",
+  "Right" : "Right",
+  "Up"    : "Top",
+  "Down"  : "Bottom",
+}
+
 
 function TwoFiftySixGame(valuesString_) {
   if (valuesString_) {
-    this.verifyAndSet(valuesString_);
+    this._verifyAndSet(valuesString_);
   } else {
-    this.initializeValues();
+    this._initializeValues();
   }
-  this.score = 0;
+  this._score = 0;
+  this._isDone = false;
   // this.getValues = function () { return values.slice(); }
   // this.setValues = function (newValues) = {
   //
@@ -31,12 +39,13 @@ function TwoFiftySixGame(valuesString_) {
 
 TwoFiftySixGame.prototype.copy = function () {
   var copy = new this.constructor();
-  copy.score = this.score;
-  copy.values = this.values.slice();
+  copy._score = this._score;
+  copy._values = this._values.slice();
+  copy._isDone = this._isDone;
   return copy;
 };
 
-TwoFiftySixGame.prototype.verifyAndSet = function (valuesString) {
+TwoFiftySixGame.prototype._verifyAndSet = function (valuesString) {
   // var cells = cellsString.match(/\D+/);
   var words, values, index, zeroes, value;
 
@@ -63,19 +72,23 @@ TwoFiftySixGame.prototype.verifyAndSet = function (valuesString) {
       }
     }
   }
-  this.values = values;
+  this._values = values;
   return this;
 };
 
+TwoFiftySixGame.prototype.score = function () { return this._score; };
 
-TwoFiftySixGame.prototype.initializeValues = function () {
-  this.values = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
-  this.addNewValues(2);
+TwoFiftySixGame.prototype.values = function () { return this._values; };
+
+
+TwoFiftySixGame.prototype._initializeValues = function () {
+  this._values = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
+  this._addNewValues(2);
 };
 
 TwoFiftySixGame.prototype.emptyPositions = function () {
   var positions = [];
-  this.values.forEach(function (value, index) {
+  this._values.forEach(function (value, index) {
     if (value === 0) { positions.push(index); }
   });
   return positions;
@@ -83,19 +96,19 @@ TwoFiftySixGame.prototype.emptyPositions = function () {
 
 TwoFiftySixGame.prototype.filledPositions = function () {
   var positions = [];
-  this.values.forEach(function (value, index) {
+  this._values.forEach(function (value, index) {
     if (value > 0) { positions.push(index); }
   });
   return positions;
 };
 
-TwoFiftySixGame.prototype.addNewValues = function (count) {
+TwoFiftySixGame.prototype._addNewValues = function (count) {
   var emptyPositions = this.emptyPositions();
   var newPositions = Util.samples(emptyPositions, count);
   var newValues = Util.samples(SEED_VALUES, count);
   var index = 0;
   do {
-    this.values[newPositions[index]] = newValues[index];
+    this._values[newPositions[index]] = newValues[index];
   } while (++index < count);
   return this;
 };
@@ -111,8 +124,8 @@ TwoFiftySixGame.prototype.toString = function () {
   return words.join("   ");
 };
 
-TwoFiftySixGame.prototype.forSlice = function (sliceIndex, direction, action) {
-  var values = this.values;
+TwoFiftySixGame.prototype._forSlice = function (sliceIndex, direction, action) {
+  var values = this._values;
   var position, increment, count, value;
 
   switch (direction[0].toUpperCase()) {
@@ -131,30 +144,30 @@ TwoFiftySixGame.prototype.forSlice = function (sliceIndex, direction, action) {
 };
 
 
-TwoFiftySixGame.prototype.getSlice = function (sliceIndex, direction_) {
-  var values = this.values;
+TwoFiftySixGame.prototype._getSlice = function (sliceIndex, direction_) {
+  var values = this._values;
   var direction = direction_ || "LEFT_TO_RIGHT";
   var slice, index, increment, count, value;
 
   slice = [];
-  this.forSlice(sliceIndex, direction, function (value) {
+  this._forSlice(sliceIndex, direction, function (value) {
     slice.push(value);
   });
   return slice;
 };
 
-TwoFiftySixGame.prototype.putSlice = function (sliceIndex, direction, slice) {
-  var values = this.values;
+TwoFiftySixGame.prototype._putSlice = function (sliceIndex, direction, slice) {
+  var values = this._values;
   var index = 0;
 
-  this.forSlice(sliceIndex, direction, function (_value, position) {
+  this._forSlice(sliceIndex, direction, function (_value, position) {
     values[position] = slice[index++];
   });
   return this;
 };
 
 
-TwoFiftySixGame.prototype.smashValues = function (slice) {
+TwoFiftySixGame.prototype._smashValues = function (slice) {
   var sourceValues = slice.filter(Util.isGreaterThanZero);
   var smashedValues = [0, 0, 0, 0];
   var currentValue, nextValue, fromIndex, toIndex;
@@ -172,7 +185,7 @@ TwoFiftySixGame.prototype.smashValues = function (slice) {
     }
 
     if (currentValue === nextValue) {
-      this.score += (smashedValues[toIndex++] = currentValue + nextValue);
+      this._score += (smashedValues[toIndex++] = currentValue + nextValue);
       currentValue = sourceValues[fromIndex++];
     } else {
       smashedValues[toIndex++] = currentValue;
@@ -183,33 +196,38 @@ TwoFiftySixGame.prototype.smashValues = function (slice) {
 };
 
 
-TwoFiftySixGame.prototype.smash = function (toSide) {
+TwoFiftySixGame.prototype._smash = function (toSide) {
   var index, isChanged, direction, values, smashedValues;
   index = 4;
   isChanged = false;
   direction = toSide;
 
   while (index--) {
-    values = this.getSlice(index, direction);
-    smashedValues = this.smashValues(values);
+    values = this._getSlice(index, direction);
+    smashedValues = this._smashValues(values);
     if (!Util.areEqualArrays(values, smashedValues)) {
-      this.putSlice(index, direction, smashedValues);
+      this._putSlice(index, direction, smashedValues);
       isChanged = true;
     }
   }
   return isChanged;
 };
 
-TwoFiftySixGame.prototype.move = function (toSide) {
-  return this.smash(toSide) ? this.addNewValues(1) : this;
+TwoFiftySixGame.prototype.move = function (direction) {
+  var toSide = MOVE_MAP[direction];
+  if (!this._isDone && this._smash(toSide)) {
+    this._addNewValues(1);
+  }
+  return this;
 };
 
 TwoFiftySixGame.prototype.isDone = function () {
   var index = SIDES.length;
 
-  if (!this.values.every(Util.isGreaterThanZero)) { return false; }
+  if (this._isDone) { return true; }
+  if (!this._values.every(Util.isGreaterThanZero)) { return false; }
 	while (index--) {
-    if (this.copy().smash(SIDES[index])) { return false; }
+    if (this.copy()._smash(SIDES[index])) { return false; }
   }
-  return true;
+  return (this._isDone = true);
 };

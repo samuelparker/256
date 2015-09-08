@@ -6,25 +6,25 @@
       differences in how form elements appear between Firefox and IE
       See: http://necolas.github.com/normalize.css/
     -->
-    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="css/normalize.css">
     <!--
       application.css is where you put your styles
     -->
-    <link rel="stylesheet" href="/css/application.css">
+    <link rel="stylesheet" href="css/application.css">
 
-    <script src="/lib/jquery-2.1.4.js"></script>
-    <script src="/js/utils.js"></script>
-    <script src="/js/game.js"></script>
-    <script src="/js/application.js"></script>
+    <script src="lib/jquery-2.1.4.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/game.min.js"></script>
+    <script src="js/gameview.js"></script>
+    <script src="js/application.js"></script>
 
     <title>256!</title>
   </head>
   <body>
     <h2>256!</h2>
-    <div id="header">
-      <p>Score: <span id="score"></span></p>
+    <div class="container"></div>
       <button id="reset">New Game</button>
+      <div id="game-view"/>
     </div>
-    <div id="container"></div>
   </body>
 </html>
