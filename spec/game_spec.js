@@ -99,6 +99,60 @@ describe("TwoFiftySixGame", function () {
       });
 
     });
+
+    describe("when called with two args", function () {
+      it('sets the score as well', function () {
+        var string = "2 4 8 16  0 0 0 32  0 0 0 64  0 0 0 2";
+        var game = new TwoFiftySixGame(string, 248);
+        expect(game.score()).toBe(248);
+      });
+    });
+  });
+
+  describe("#score", function () {
+    it("answers the score", function () {
+      var gameWithScore = new TwoFiftySixGame(this.string, 340);
+      expect(gameWithScore.score()).toBe(340);
+    });
+  });
+
+  describe("#values", function () {
+    it("answers an array of the values", function () {
+      expect(this.game.values()).toEqual(
+        [4,0,0,0,  8,0,0,0,  4,2,0,0,  4,8,4,0]);
+    });
+
+    it("answers a separate copy of the original array", function () {
+      expect(this.game.values()).not.toBe(this.game.values());
+    });
+  });
+
+  describe("#reset", function () {
+    beforeEach(function() {
+      this.game.reset();
+    });
+
+    it("answers the game itself", function () {
+      expect(this.game.reset()).toBe(this.game);
+    });
+
+    it("sets the score to zero", function () {
+      expect(this.game.score()).toBe(0);
+    });
+
+    it("has 14 zeroes in the values", function () {
+      var matches = this.game.values().filter(function (value) {
+        return value === 0;
+      })
+      expect(matches.length).toBe(14);
+    });
+
+    it("has two 2 or 4 values", function () {
+      var matches = this.game.values().filter(function (value) {
+        return (value === 2 || value === 4);
+      })
+      expect(matches.length).toBe(2);
+    });
   });
 
   describe("#emptyPositions", function () {
@@ -123,12 +177,12 @@ describe("TwoFiftySixGame", function () {
 
   describe("#move", function () {
     it("answers itself", function () {
-      expect(this.game.move("L")).toBe(this.game);
+      expect(this.game.move("left")).toBe(this.game);
     });
 
     describe("when the direction is leftward", function () {
       beforeEach(function () {
-        this.game.move("left side");
+        this.game.move("left");
       });
 
       it("smashed the numbers to the left, without effect", function () {
@@ -146,7 +200,7 @@ describe("TwoFiftySixGame", function () {
 
     describe("when the direction is rightward", function () {
       beforeEach(function () {
-        this.game.move("right side");
+        this.game.move("right");
       });
 
       it("smashed the numbers to the right", function () {
@@ -173,10 +227,10 @@ describe("TwoFiftySixGame", function () {
 
     describe("when the direction is upward", function () {
       beforeEach(function () {
-        this.game.move("top side");
+        this.game.move("up");
       });
 
-      it("smashed the numbers to the top", function () {
+      it("smashed the numbers up to the top", function () {
         var string = this.game.values().join(" ");
         expect(string).toMatch(/4 2 4 . 8 8 . . 8 . . . . . . ./);
       });
@@ -200,10 +254,10 @@ describe("TwoFiftySixGame", function () {
 
     describe("when the direction is downward", function () {
       beforeEach(function () {
-        this.game.move("bottom side");
+        this.game.move("down");
       });
 
-      it("smashed the numbers to the bottom", function () {
+      it("smashed the numbers down to the bottom", function () {
         var string = this.game.values().join(" ");
         expect(string).toMatch(/. . . . 4 . . . 8 2 . . 8 8 4 ./);
       });

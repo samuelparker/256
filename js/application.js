@@ -9,12 +9,11 @@ $(function() {
   var game, view;
 
   function reset(event) {
-    if (event) { event.preventDefault(); }
-    game = new TwoFiftySixGame();
-    view.render(game);
+    event.preventDefault();
+    view.render(game.reset());
   }
 
-  $("#reset").on("click", reset);
+  $("#game-view").on("click", "button.reset", reset);
 
   $(document).on("keyup", function (event) {
     event.preventDefault();
@@ -26,6 +25,7 @@ $(function() {
     }
   });
 
+  game = new TwoFiftySixGame();
   view = new GameView("#game-view");
-
+  view.render(game);
 });

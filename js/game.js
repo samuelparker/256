@@ -9,33 +9,38 @@ var POSITIONS   = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
 var VALUES      = [0, 2, 4, 8, 16, 32, 64, 128, 256];
 var SEED_VALUES = [2, 2, 2, 4];
 
-var LEFT_TO_RIGHT = "L";
-var RIGHT_TO_LEFT = "R";
-var TOP_TO_BOTTOM = "T";
-var BOTTOM_TO_TOP = "B";
-var SIDES         = "Left Right Top Bottom".split(" ");
+var LEFT_TO_RIGHT = "l";
+var RIGHT_TO_LEFT = "r";
+var TOP_TO_BOTTOM = "t";
+var BOTTOM_TO_TOP = "b";
+var SIDES         = "left right top bottom".split(" ");
 
 var MOVE_MAP = {
-  "Left"  : "Left",
-  "Right" : "Right",
-  "Up"    : "Top",
-  "Down"  : "Bottom",
+  "l" : "left",
+  "r" : "right",
+  "u" : "top",
+  "d" : "bottom",
 }
 
 
-function TwoFiftySixGame(valuesString_) {
-  if (valuesString_) {
-    this._verifyAndSet(valuesString_);
-  } else {
-    this._initializeValues();
-  }
+function TwoFiftySixGame(valuesString_, score__) {
+  this.reset();
+  if (valuesString_) { this._verifyAndSet(valuesString_); }
+  if (score__) { this._score = score__; }
+}
+
+TwoFiftySixGame.prototype.score = function () { return this._score; };
+
+TwoFiftySixGame.prototype.values = function () { return this._values.slice(); };
+
+TwoFiftySixGame.prototype.reset = function () {
+  this._values = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
+  this._addNewValues(2);
   this._score = 0;
   this._isDone = false;
-  // this.getValues = function () { return values.slice(); }
-  // this.setValues = function (newValues) = {
-  //
-  // };
-}
+  return this;
+};
+
 
 TwoFiftySixGame.prototype.copy = function () {
   var copy = new this.constructor();
@@ -76,16 +81,6 @@ TwoFiftySixGame.prototype._verifyAndSet = function (valuesString) {
   return this;
 };
 
-TwoFiftySixGame.prototype.score = function () { return this._score; };
-
-TwoFiftySixGame.prototype.values = function () { return this._values; };
-
-
-TwoFiftySixGame.prototype._initializeValues = function () {
-  this._values = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
-  this._addNewValues(2);
-};
-
 TwoFiftySixGame.prototype.emptyPositions = function () {
   var positions = [];
   this._values.forEach(function (value, index) {
@@ -118,7 +113,7 @@ TwoFiftySixGame.prototype.toString = function () {
   words = [];
   sliceIndex = 0;
   while (sliceIndex < 4) {
-    word = this.getSlice(sliceIndex++).join(" ");
+    word = this._getSlice(sliceIndex++).join(" ");
     words.push(word);
   }
   return words.join("   ");
@@ -128,7 +123,7 @@ TwoFiftySixGame.prototype._forSlice = function (sliceIndex, direction, action) {
   var values = this._values;
   var position, increment, count, value;
 
-  switch (direction[0].toUpperCase()) {
+  switch (direction[0].toLowerCase()) {
     case LEFT_TO_RIGHT : position =  sliceIndex * 4    ; increment =  1; break;
     case RIGHT_TO_LEFT : position =  sliceIndex * 4 + 3; increment = -1; break;
     case TOP_TO_BOTTOM : position =  sliceIndex        ; increment =  4; break;
@@ -146,7 +141,7 @@ TwoFiftySixGame.prototype._forSlice = function (sliceIndex, direction, action) {
 
 TwoFiftySixGame.prototype._getSlice = function (sliceIndex, direction_) {
   var values = this._values;
-  var direction = direction_ || "LEFT_TO_RIGHT";
+  var direction = direction_ || LEFT_TO_RIGHT;
   var slice, index, increment, count, value;
 
   slice = [];
@@ -214,7 +209,7 @@ TwoFiftySixGame.prototype._smash = function (toSide) {
 };
 
 TwoFiftySixGame.prototype.move = function (direction) {
-  var toSide = MOVE_MAP[direction];
+  var toSide = MOVE_MAP[direction[0].toLowerCase()];
   if (!this._isDone && this._smash(toSide)) {
     this._addNewValues(1);
   }
