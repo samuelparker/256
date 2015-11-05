@@ -11,7 +11,7 @@
 
 Let's build a clone of the game [2048](http://gabrielecirulli.github.io/2048/).
 
-We will implement the core game play. Play the game for a few minutes so U understand the rules of the game. How do blocks spawn? When does the game disallow a movement? How do blocks merge? How do blocks slide? Try to write a specification of how the game mechanics work.
+We will implement the core game play. Play the game for a few minutes so you understand the rules of the game. How do blocks spawn? When does the game disallow a movement? How do blocks merge? How do blocks slide? Try to write a specification of how the game mechanics work.
 
 ## Releases
 
@@ -23,7 +23,7 @@ In `game.js` create a Game model to store the state of our game. Use JavaScript'
 
 `game = new Game('0000202000000000') // generates a board with the given start`
 
-The latter will come in handy for testing, which U will certainly want to do for this project given the tricky game rules.
+The latter will come in handy for testing, which you will certainly want to do for this project given the tricky game rules.
 
 Add a `toString()` method to your Game model.
 
@@ -58,9 +58,9 @@ The Game model will expose a very simple public interface to the controller.
 0020"
 ```
 
-Implement the `move` method for all four directions. Think about useful helper methods U might need, such as `spawnBlock`.
+Implement the `move` method for all four directions. Think about useful helper methods you might need, such as `spawnBlock`.
 
-U might want to setup Jasmine and write specs for model. Or U might want to make a simple `game_test.js` file that includes simple assertions. This game has a variety of interesting edge cases to consider, so make sure U have the logic working correctly.
+You might want to setup Jasmine and write specs for model. Or you might want to make a simple `game_test.js` file that includes simple assertions. This game has a variety of interesting edge cases to consider, so make sure you have the logic working correctly.
 
 ### Release 2: Integrate the model with the interface via a controller
 
@@ -72,4 +72,4 @@ In your Game model and controller write methods to update the DOM to display you
 
 * Implement a score display.
 * Implement starting a new game.
-* Implement storing the game in LocalStorage so that it still shows up if U close the tab.
+* Implement storing the game in LocalStorage so that it still shows up if you close the tab.
