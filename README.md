@@ -45,7 +45,7 @@ The Game model will expose a very simple public interface to the controller.
 2020
 0000
 0000"
-> game.move('left')
+> game.move('right')
 > game.toString()
 "0000
 0004
