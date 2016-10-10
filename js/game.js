@@ -44,6 +44,12 @@ Game.prototype.move = function(direction){
     case 'left':
       moveLeft(this.board);
       break;
+    case 'up':
+      moveUp(this.board);
+      break;
+    case 'down':
+      moveDown(this.board);
+      break;
   }
 }
 
@@ -106,5 +112,51 @@ function moveLeft(board){
     board[i] = eachRowNumberFromLeft(board[i]);
   };
 };
+
+
+// get the numbers out of a column and into an array
+function moveColumnUp(board, columnNumber){
+  var newColumn = changeColumn(board, columnNumber);
+
+  // rebuild the column with the new array
+  board.forEach(function(row){
+    row[columnNumber] = newColumn.shift();
+  });
+};
+
+function moveColumnDown(board, columnNumber){
+  var newColumn = changeColumn(board, columnNumber);
+
+  // rebuild the column with the new array
+  board.forEach(function(row){
+    row[columnNumber] = newColumn.pop();
+  });
+};
+
+function changeColumn(board, columnNumber){
+  var numbers = [];
+  board.forEach(function(row){
+    if (row[columnNumber] > 0){
+      numbers.push(row[columnNumber]);
+    };
+  });
+
+  // merge the numbers
+  return mergeNumbers(numbers);
+};
+
+function moveUp(board){
+  for(var i = 0; i < board.length; i++){
+    moveColumnUp(board, i);
+  };
+};
+
+function moveDown(board){
+  for(var i = 0; i < board.length; i++){
+    moveColumnDown(board, i);
+  };
+};
+
+
 
 
