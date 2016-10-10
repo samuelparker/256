@@ -1,6 +1,18 @@
 function Game(boardState=randomBoardState()){
   this.boardState = boardState;
+  this.board = generateBoard(boardState);
 };
+
+function generateBoard(board){
+  var boardArray = board.split('').map(function(number){
+    return parseInt(number);
+  });
+  var newBoard = [];
+  while(newBoard.length < 4){
+    newBoard.push(boardArray.splice(0,4))
+  }
+  return newBoard
+}
 
 function randomBoardState(){
   var board = [];
@@ -14,7 +26,15 @@ function randomBoardState(){
   return board.join('');
 };
 
-// game = new Game('0000200000000020');
-// otherGame = new Game();
-// console.log(game.boardState.length);
-// console.log(otherGame.boardState.length);
+Game.prototype.toString = function(){
+  var boardString = '';
+  this.board.forEach(function(row){
+    boardString += row.join('') + '\n';
+  });
+  return boardString;
+};
+
+game = new Game('0000200000000020');
+otherGame = new Game();
+console.log(game.board);
+console.log(game.toString());
