@@ -1,0 +1,11 @@
+.game-board {
+  margin: 50px auto;
+  width: 40%;
+}
+
+.game-block {
+  display: inline-block;
+  width: 24%;
+  text-align: center;
+  border: 1px solid black;
+}
