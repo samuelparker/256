@@ -34,8 +34,6 @@ Game.prototype.toString = function(){
   return boardString;
 };
 
-
-
 Game.prototype.move = function(direction){
   switch (direction) {
     case 'right':
@@ -51,6 +49,7 @@ Game.prototype.move = function(direction){
       moveDown(this.board);
       break;
   }
+  spawnBlock(this.board);
 }
 
 // returns a new merged and moved row
@@ -157,6 +156,19 @@ function moveDown(board){
   };
 };
 
+function spawnBlock(board){
+  var spawned = false;
+  while (spawned == false){
+    var row = Math.floor(Math.random() * 4)
+    var col = Math.floor(Math.random() * 4)
+
+    if ( board[row][col] == 0){
+      board[row][col] = 2;
+      spawned = true;
+    };
+
+  }
+};
 
 
 
