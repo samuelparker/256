@@ -97,7 +97,7 @@ function mergeNumbers(numbers){
 // returns the [number, it's index in a row] for each number in the row
   // going right to left
 function eachRowNumberFromRight(row){
-  return eachRowNumberFromLeft(row).reverse()
+  return eachRowNumberFromLeft(row.reverse()).reverse()
 };
 
 function moveRight(board){
@@ -115,7 +115,7 @@ function moveLeft(board){
 
 // get the numbers out of a column and into an array
 function moveColumnUp(board, columnNumber){
-  var newColumn = changeColumn(board, columnNumber);
+  var newColumn = changeColumn(board, columnNumber, makeColumnUpArray);
 
   // rebuild the column with the new array
   board.forEach(function(row){
@@ -124,7 +124,7 @@ function moveColumnUp(board, columnNumber){
 };
 
 function moveColumnDown(board, columnNumber){
-  var newColumn = changeColumn(board, columnNumber);
+  var newColumn = changeColumn(board, columnNumber, makeColumnDownArray);
 
   // rebuild the column with the new array
   board.forEach(function(row){
@@ -132,11 +132,19 @@ function moveColumnDown(board, columnNumber){
   });
 };
 
-function changeColumn(board, columnNumber){
+function makeColumnUpArray(numbers, item){
+  numbers.push(item);
+};
+
+function makeColumnDownArray(numbers, item){
+  numbers.unshift(item);
+};
+
+function changeColumn(board, columnNumber, makeColumnCallback){
   var numbers = [];
   board.forEach(function(row){
     if (row[columnNumber] > 0){
-      numbers.push(row[columnNumber]);
+      makeColumnCallback(numbers, row[columnNumber]);
     };
   });
 
